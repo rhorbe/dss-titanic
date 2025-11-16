@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, Field
 
 class PassengerBase(BaseModel):
@@ -5,12 +6,12 @@ class PassengerBase(BaseModel):
     name: str = Field(..., alias='name', description="Full name of the passenger", min_length=1)
     sex: str = Field(..., alias='sex', description="Gender of the passenger", pattern='^[MF]$')
     age: float = Field(..., alias='age', description="Age of the passenger in years", ge=1)
-    sibSp: int = Field(..., alias='sibSp', description="Number of siblings/spouses aboard")
-    parch: int = Field(..., alias='parch', description="Number of parents/children aboard")
+    sibSp: Optional[int] = Field(None, alias='sibSp', description="Number of siblings/spouses aboard")
+    parch: Optional[int] = Field(None, alias='parch', description="Number of parents/children aboard")
     fare: float = Field(..., alias='fare', description="Ticket fare paid by the passenger", ge=1)
-    cabin: int = Field(..., alias='cabin', description="Cabin number", ge=1)
-    embarked: str = Field(..., alias='embarked', description="Port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton)", pattern='^[CQS]$')
-    ticket_number: int = Field(..., alias='ticket_number', description="Ticket number", ge=1)
+    cabin: Optional[int] = Field(None, alias='cabin', description="Cabin number", ge=1)
+    embarked: Optional[str] = Field(None, alias='embarked', description="Port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton)", pattern='^[CQS]$')
+    ticket_number: Optional[int] = Field(None, alias='ticket_number', description="Ticket number", ge=1)
 
 class PassengerPredictionRequest(PassengerBase):
     pass

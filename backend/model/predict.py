@@ -1,30 +1,50 @@
 # predict.py
+from sklearn.discriminant_analysis import StandardScaler
+from config.config import ROOT_DIR, X_TRAIN_PATH
 import pandas as pd
 import joblib
-from model.preprocesamiento import clean_and_prepare
+
 
 def load_model(model_path="decision_tree_model.pkl"):
     return joblib.load(model_path)
 
+def apply_preprocess(df):
+    """
+    Aplica el mismo preprocesamiento que se usó en el entrenamiento
+    a un DataFrame de pandas.
+    """
+    
+    new_extended = df.copy()
+    new_extended["FamilySize"] = new_extended["SibSp"] + new_extended["Parch"] + 1
+    new_extended["IsAlone"] = (new_extended["FamilySize"] == 1).astype(int)
+
+    new_extended["Sex"] = new_extended["Sex"].map({"male": 0, "female": 1})
+
+    cat_cols = ["Embarked", "Pclass"]
+    new_extended["Pclass"] = new_extended["Pclass"].astype("category")
+    new_extended = pd.get_dummies(new_extended, columns=cat_cols, drop_first=True)
+
+    cols_to_scale = ["Age", "SibSp", "Parch", "Fare", "FamilySize"]
+    scaler = joblib.load(f'{ROOT_DIR}\\model\\arbol\\scaler.pkl')
+    new_extended[cols_to_scale] = scaler.transform(new_extended[cols_to_scale])
+
+    feature_columns = pd.read_csv(X_TRAIN_PATH).columns
+    for col in feature_columns:
+        if col not in new_extended.columns:
+            new_extended[col] = 0
+
+    new_extended = new_extended[feature_columns]
+    new_extended.to_csv("new_extended.csv", index=False)
+    return new_extended
+    
 def preprocess_new_passenger(passenger_dict):
     """
     Convierte un diccionario con los datos de un pasajero
     en un DataFrame con las mismas columnas que el entrenamiento.
     """
-
-    # 1. Cargar X del dataset de entrenamiento (para obtener columnas correctas)
-    df = clean_and_prepare("model/train.csv")
-
-    y = df['Survived']
-    X = df.drop("Survived", axis=1)
-
-    # 2. Crear DataFrame del nuevo pasajero
-    df_new = pd.DataFrame([passenger_dict])
-    df_new = pd.get_dummies(df_new, columns=["Sex", "Embarked"])
-    df_new = df_new.reindex(columns=X.columns, fill_value=0)
-    df_new = df_new.astype(X.dtypes.to_dict())
-
-    return df_new
+    df = pd.DataFrame([passenger_dict])
+    df_processed = apply_preprocess(df)
+    return df_processed
 
 
 def predict_passenger(passenger_dict):
@@ -32,7 +52,7 @@ def predict_passenger(passenger_dict):
     Recibe un diccionario con los datos del pasajero
     y devuelve 0 (no sobrevivió) o 1 (sobrevivió).
     """
-    model = load_model('model/decision_tree_model.pkl')
+    model = load_model(f'{ROOT_DIR}\\model\\arbol\\decision_tree_model.pkl')
     X_new = preprocess_new_passenger(passenger_dict)
     prediction = model.predict(X_new)[0]
 
@@ -44,11 +64,11 @@ if __name__ == "__main__":
     pasajero = {
         "Pclass": 1,
         "Sex": "male",
-        "Age": 20,
+        "Age": 1,
         "SibSp": 0,
         "Parch": 0,
         "Fare": 70,
-        "Embarked": "Q"
+        "Embarked": "S"
     }
 
     resultado = predict_passenger(pasajero)

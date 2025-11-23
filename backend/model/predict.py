@@ -22,10 +22,10 @@ def apply_preprocess(df):
 
     cat_cols = ["Embarked", "Pclass"]
     new_extended["Pclass"] = new_extended["Pclass"].astype("category")
-    new_extended = pd.get_dummies(new_extended, columns=cat_cols, drop_first=True)
+    new_extended = pd.get_dummies(new_extended, columns=cat_cols)
 
     cols_to_scale = ["Age", "SibSp", "Parch", "Fare", "FamilySize"]
-    scaler = joblib.load(f'{ROOT_DIR}\\model\\arbol\\scaler.pkl')
+    scaler = joblib.load(f'{ROOT_DIR}\\model\\arbol\\scaler_titanic.pkl')
     new_extended[cols_to_scale] = scaler.transform(new_extended[cols_to_scale])
 
     feature_columns = pd.read_csv(X_TRAIN_PATH).columns
@@ -34,7 +34,6 @@ def apply_preprocess(df):
             new_extended[col] = 0
 
     new_extended = new_extended[feature_columns]
-    new_extended.to_csv("new_extended.csv", index=False)
     return new_extended
     
 def preprocess_new_passenger(passenger_dict):
@@ -58,18 +57,3 @@ def predict_passenger(passenger_dict):
 
     return int(prediction)
 
-
-if __name__ == "__main__":
-    # Ejemplo de pasajero
-    pasajero = {
-        "Pclass": 1,
-        "Sex": "male",
-        "Age": 1,
-        "SibSp": 0,
-        "Parch": 0,
-        "Fare": 70,
-        "Embarked": "S"
-    }
-
-    resultado = predict_passenger(pasajero)
-    print("Sobrevivió?" , "Sí" if resultado == 1 else "No")

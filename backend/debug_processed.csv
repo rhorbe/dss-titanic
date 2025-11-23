@@ -1,2 +1,0 @@
-Age,SibSp,Parch,Fare,FamilySize,IsAlone,Embarked_Q,Embarked_S,Pclass_2,Pclass_3,Pclass,Sex_1,Sex_male
-15.996405705896468,-3.615042879085601e-17,-1.7451931140413245e-17,24.931046901208077,,,,,,,1.0,False,True

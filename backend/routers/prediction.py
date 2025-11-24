@@ -26,15 +26,12 @@ def predict_survival(passenger: PassengerPredictionRequest):
 
     passengerPredictionResponse = PassengerPredictionResponse(
         pClass=passenger_dict.get("pClass", 0),
-        name=passenger_dict.get("name", ""),
         sex=passenger_dict.get("sex", ""),
         age=passenger_dict.get("age", 0),
         sibSp=passenger_dict.get("sibSp", 0),
         parch=passenger_dict.get("parch", 0),
         fare=passenger_dict.get("fare", 0.0),
-        cabin=passenger_dict.get("cabin", ""),
         embarked=passenger_dict.get("embarked", ""),
-        ticket_number=passenger_dict.get("ticket_number", ""),
         survived=bool(prediction)
     )
 

@@ -17,3 +17,6 @@ class SVM(SKLearnModel):
 
     def save_model(self, model_path):
         joblib.dump(self.model, model_path)
+
+    def load_model(self, model_path):
+        self.model = joblib.load(model_path)

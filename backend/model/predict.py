@@ -25,7 +25,7 @@ def apply_preprocess(df):
     new_extended = pd.get_dummies(new_extended, columns=cat_cols)
 
     cols_to_scale = ["Age", "SibSp", "Parch", "Fare", "FamilySize"]
-    scaler = joblib.load(f'{ROOT_DIR}\\model\\arbol\\scaler_titanic.pkl')
+    scaler = joblib.load(f'{ROOT_DIR}\\model\\scaler_titanic.pkl')
     new_extended[cols_to_scale] = scaler.transform(new_extended[cols_to_scale])
 
     feature_columns = pd.read_csv(X_TRAIN_PATH).columns
@@ -51,7 +51,7 @@ def predict_passenger(passenger_dict):
     Recibe un diccionario con los datos del pasajero
     y devuelve 0 (no sobrevivió) o 1 (sobrevivió).
     """
-    model = load_model(f'{ROOT_DIR}\\model\\arbol\\decision_tree_model.pkl')
+    model = load_model(f'{ROOT_DIR}\\model\\svm\\svm_titanic.pkl')
     X_new = preprocess_new_passenger(passenger_dict)
     prediction = model.predict(X_new)[0]
 

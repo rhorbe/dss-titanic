@@ -3,8 +3,8 @@ import { ProgressBar } from "react-bootstrap";
 
 export default function ProbabilityGauge({ value, survived }) {
 
-  const survivalProb = value >= 0 ? value : 1 + value;
-  const deathProb = 1 - survivalProb;
+  const survivalProb = value.probability_survived;
+  const deathProb =  value.probability_not_survived;
 
   const survivalPct = Math.round(survivalProb * 100);
   const deathPct = Math.round(deathProb * 100);
@@ -22,8 +22,8 @@ export default function ProbabilityGauge({ value, survived }) {
         { pct: deathPct, variant: "danger", label: `${deathPct}%` },
       ]
     : [
-        { pct: deathPct, variant: "danger", label: `${deathPct}%` },
-        { pct: survivalPct, variant: "success", label: `${survivalPct}%` },
+      { pct: deathPct, variant: "danger", label: `${deathPct}%` },
+      { pct: survivalPct, variant: "success", label: `${survivalPct}%` },
       ];
 
   return (

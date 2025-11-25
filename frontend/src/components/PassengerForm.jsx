@@ -315,7 +315,7 @@ export default function PassengerForm() {
               {/* 🔥 PROBABILIDAD */}
               {result.survived !== undefined && (
               <ProbabilityGauge
-                value={result.survived ? result.probability_survived : result.probability_not_survived}
+                value={result}
                 survived={result.survived}
               />
               )}

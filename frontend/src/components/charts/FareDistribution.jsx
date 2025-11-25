@@ -9,12 +9,23 @@ export default function FareDistribution() {
       .then((r) => r.json())
       .then((json) => {
         const payload = json.fare_hist || { bins: [], counts: [] };
+
         setOption({
           title: { left: "center" },
           tooltip: { trigger: "axis" },
           xAxis: { type: "category", data: payload.bins, name: "Tarifa" },
           yAxis: { type: "value", name: "Cantidad" },
-          series: [{ type: "bar", data: payload.counts }]
+          series: [
+            {
+              type: "bar",
+              data: payload.counts,
+              label: {
+                show: true,
+                position: "top",
+                formatter: "{c}", // muestra el valor tal cual
+              },
+            },
+          ],
         });
       });
   }, []);

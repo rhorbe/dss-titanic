@@ -10,12 +10,23 @@ export default function ClassDistribution() {
       .then((json) => {
         const x = json.labels || [];
         const y = json.values || [];
+
         setOption({
           title: { left: "center" },
           tooltip: {},
           xAxis: { type: "category", data: x },
           yAxis: { type: "value" },
-          series: [{ type: "bar", data: y }]
+          series: [
+            {
+              type: "bar",
+              data: y,
+              label: {
+                show: true,
+                position: "top",
+                formatter: "{c}",
+              },
+            },
+          ],
         });
       });
   }, []);

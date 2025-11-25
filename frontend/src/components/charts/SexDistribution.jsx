@@ -8,7 +8,6 @@ export default function SexDistribution() {
     fetch("http://localhost:8000/metrics/general/sex")
       .then((r) => r.json())
       .then((json) => {
-        // json = { labels: [...], values: [...] }
         const x = json.labels || [];
         const y = json.values || [];
 
@@ -17,7 +16,17 @@ export default function SexDistribution() {
           tooltip: {},
           xAxis: { type: "category", data: x },
           yAxis: { type: "value" },
-          series: [{ type: "bar", data: y }]
+          series: [
+            {
+              type: "bar",
+              data: y,
+              label: {
+                show: true,
+                position: "top",
+                formatter: "{c}",
+              },
+            },
+          ],
         });
       });
   }, []);

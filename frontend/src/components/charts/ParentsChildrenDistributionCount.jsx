@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import EChart from "../EChart";
 
-export default function ParentsChildrenDistributionCount() {
+export default function SiblingsSpousesDistributionCount() {
   const [option, setOption] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/metrics/survival/parents_children_count")
+    fetch("http://localhost:8000/metrics/survival/siblings_spouses_count")
       .then(r => r.json())
       .then(json => {
         setOption({
-          title: {
-            left: "center"
-          },
+          title: { left: "center" },
           tooltip: { trigger: "axis" },
           legend: { top: 30 },
           xAxis: {
@@ -24,12 +22,22 @@ export default function ParentsChildrenDistributionCount() {
             {
               name: "Hombres",
               type: "bar",
-              data: json.male
+              data: json.male,
+              label: {
+                show: true,
+                position: "top",
+                formatter: "{c}"
+              }
             },
             {
               name: "Mujeres",
               type: "bar",
-              data: json.female
+              data: json.female,
+              label: {
+                show: true,
+                position: "top",
+                formatter: "{c}"
+              }
             }
           ]
         });

@@ -12,12 +12,32 @@ export default function EmbarkedDistribution() {
         const labels = json.labels || [];
         const values = json.values || [];
 
+        // Calcular porcentajes
+        const total = values.reduce((a, b) => a + b, 0);
+        const perc = total > 0 ? values.map(v => (v / total) * 100) : values;
+
         setOption({
           title: { left: "center" },
-          tooltip: {},
+          tooltip: {
+            trigger: "item",
+            formatter: p => `${p.name}: ${p.value.toFixed(2)}%`
+          },
           xAxis: { type: "category", data: labels },
-          yAxis: { type: "value" },
-          series: [{ type: "bar", data: values }]
+          yAxis: {
+            type: "value",
+            axisLabel: { formatter: v => `${v}%` }
+          },
+          series: [
+            {
+              type: "bar",
+              data: perc,
+              label: {
+                show: true,
+                position: "top",
+                formatter: (params) => `${params.value.toFixed(2)}%`
+              }
+            }
+          ]
         });
       })
       .catch((err) => setError(err.message));

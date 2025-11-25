@@ -22,7 +22,7 @@ import CorrelationMatrix from "./charts/CorrelationMatrix";
 
 
 
-export default function MetricCard({ title, chartId }) {
+export default function MetricCard({ title, chartId, textExplaination }) {
   const renderChart = () => {
     switch (chartId) {
       case "survivalBySex":
@@ -68,20 +68,19 @@ export default function MetricCard({ title, chartId }) {
       case "correlationMatrix":
         return <CorrelationMatrix />;
 
-
-
       default:
         return <p className="text-muted">Gráfico no encontrado</p>;
     }
   };
-
-
 
   return (
     <Card className="shadow-sm">
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <div className="mt-3">{renderChart()}</div>
+        <Card.Text className="text-muted mt-3">
+          <span dangerouslySetInnerHTML={{ __html: textExplaination }} />
+        </Card.Text>
       </Card.Body>
     </Card>
   );

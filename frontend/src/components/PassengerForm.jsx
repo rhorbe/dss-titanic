@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { Form, Row, Col, Button, Alert, Spinner } from "react-bootstrap";
+import ProbabilityGauge from "./ProbabilityGauge";
 
 export default function PassengerForm() {
   const [formData, setFormData] = useState({
     pClass: "",
-    name: " ",
     sex: "male",
     age: "",
     sibSp: "",
     parch: "",
     fare: "",
-    cabin: "",
-    embarked: "S",
-    ticket_number: "",
+    embarked: "S"
   });
 
   const [loading, setLoading] = useState(false);
@@ -61,62 +59,57 @@ export default function PassengerForm() {
   };
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setValidated(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setValidated(true);
 
-  const form = e.target;
-  const fd = new FormData(form);
+    const form = e.target;
+    const fd = new FormData(form);
 
-  // Validación de HTML5
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return;
-  }
-
-  setLoading(true);
-  setError(null);
-  setResult(null);
-
-  const payload = {
-    pClass: Number(fd.get("pClass")),
-    name: fd.get("name")?.trim() || null,
-    sex: fd.get("sex"),
-    age: Number(fd.get("age")),
-    sibSp: Number(fd.get("sibSp")),
-    parch: Number(fd.get("parch")),
-    fare: Number(fd.get("fare")),
-    cabin: fd.get("cabin") ? Number(fd.get("cabin")) : null,
-    embarked: fd.get("embarked"),
-    ticket_number: fd.get("ticket_number")
-      ? Number(fd.get("ticket_number"))
-      : null,
-  };
-
-  try {
-    const res = await fetch("http://localhost:8000/predict", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-    setResult(data);
-
-    // 🔥 Obtener imagen aleatoria según supervivencia
-    if (data.survived === 1 || data.survived === true) {
-      const src = await getRandomImage("sobrevivio_si", 3);
-      setResultImage(src);
-    } else {
-      const src = await getRandomImage("sobrevivio_no", 3);
-      setResultImage(src);
+    // Validación de HTML5
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
     }
-  } catch (err) {
-    setError("Error conectando con la API");
-  }
 
-  setLoading(false);
-};
+    setLoading(true);
+    setError(null);
+    setResult(null);
+
+    const payload = {
+      pClass: Number(fd.get("pClass")),
+      sex: fd.get("sex"),
+      age: Number(fd.get("age")),
+      sibSp: Number(fd.get("sibSp")),
+      parch: Number(fd.get("parch")),
+      fare: Number(fd.get("fare")),
+      embarked: fd.get("embarked")
+    };
+    console.log("Payload enviado:", payload);
+    try {
+      const res = await fetch("http://localhost:8000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      setResult(data);
+
+      // 🔥 Obtener imagen aleatoria según supervivencia
+      if (data.survived === 1 || data.survived === true) {
+        const src = await getRandomImage("sobrevivio_si", 3);
+        setResultImage(src);
+      } else {
+        const src = await getRandomImage("sobrevivio_no", 3);
+        setResultImage(src);
+      }
+    } catch (err) {
+      setError("Error conectando con la API");
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div className="d-flex justify-content-center w-100">
@@ -319,14 +312,35 @@ const handleSubmit = async (e) => {
                   }}
                 />
               )}
-
               {/* 🔥 PROBABILIDAD */}
-              {result.probability !== undefined && (
-                <p className="mt-2" style={{ fontSize: "1.1rem" }}>
-                  Probabilidad estimada:{" "}
-                  <strong>{(result.probability * 100).toFixed(2)}%</strong>
-                </p>
+              {result.survived !== undefined && (
+              <ProbabilityGauge
+                value={result.survived ? result.probability_survived : result.probability_not_survived}
+                survived={result.survived}
+              />
               )}
+              {/* 🔥 BARRA DE PROBABILIDAD
+              <div className="mt-3">
+                <div className="progress" style={{ height: "22px", borderRadius: "12px" }}>
+                  <div
+                    className={`progress-bar ${result.survived ? "bg-success" : "bg-danger"}`}
+                    role="progressbar"
+                    style={{
+                      width: `${(result.survived
+                        ? result.probability_survived
+                        : result.probability_not_survived) * 100}%`,
+                      fontWeight: "bold"
+                    }}
+                  >
+                    {(
+                      (result.survived
+                        ? result.probability_survived
+                        : result.probability_not_survived) * 100
+                    ).toFixed(1)}%
+                  </div>
+                </div>
+              </div> */}
+
             </div>
           )}
         </div>

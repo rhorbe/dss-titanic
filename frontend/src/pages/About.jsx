@@ -5,8 +5,7 @@ export default function About() {
         <Container>
             <h1 className="mb-4">Acerca de esta Aplicación</h1>
             <p>
-                Esta aplicación fue desarrollada como parte del proyecto final para la materia de Data Science y
-                Sistemas (DSS) en la Universidad Nacional de La Plata. Su objetivo es analizar el dataset del Titanic,
+                Esta aplicación fue desarrollada como parte del proyecto final para la materia de Sistemas de Soporte Para la Toma De Desiciones (SSD) en la Universidad Nacional de La Patagonia San Juan Bosco. Su objetivo es analizar el dataset del Titanic,
                 mostrar métricas relevantes y predecir la supervivencia de los pasajeros utilizando modelos de machine
                 learning.
             </p>

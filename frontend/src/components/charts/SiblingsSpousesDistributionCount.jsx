@@ -1,0 +1,41 @@
+import React, { useEffect, useState } from "react";
+import EChart from "../EChart";
+
+export default function SiblingsSpousesDistributionCount() {
+  const [option, setOption] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/metrics/survival/siblings_spouses_count")
+      .then(r => r.json())
+      .then(json => {
+        setOption({
+          title: {
+            left: "center"
+          },
+          tooltip: { trigger: "axis" },
+          legend: { top: 30 },
+          xAxis: {
+            type: "category",
+            data: json.labels,
+            name: "Cantidad"
+          },
+          yAxis: { type: "value", name: "Pasajeros" },
+          series: [
+            {
+              name: "Hombres",
+              type: "bar",
+              data: json.male
+            },
+            {
+              name: "Mujeres",
+              type: "bar",
+              data: json.female
+            }
+          ]
+        });
+      });
+  }, []);
+
+  if (!option) return <div>Cargando...</div>;
+  return <EChart option={option} />;
+}

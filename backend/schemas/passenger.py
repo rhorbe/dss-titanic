@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class PassengerBase(BaseModel):
     pClass: int = Field(..., alias='pClass', description="Passenger class (1 = 1st, 2 = 2nd, 3 = 3rd)", ge=1, le=3)
-    name: str = Field(..., alias='name', description="Full name of the passenger", min_length=1)
+    name: Optional[str] = Field(..., alias='name', description="Full name of the passenger", min_length=1)
     sex: str = Field(..., alias='sex', description="Gender of the passenger", pattern='^(male|female)$')
     age: int = Field(..., alias='age', description="Age of the passenger in years", ge=1)
     sibSp: Optional[int] = Field(None, alias='sibSp', description="Number of siblings/spouses aboard")

@@ -53,7 +53,12 @@ def predict_passenger(passenger_dict):
     """
     model = load_model(f'{ROOT_DIR}\\model\\svm\\svm_titanic.pkl')
     X_new = preprocess_new_passenger(passenger_dict)
+
+    probabilities = model.predict_proba(X_new)
     prediction = model.predict(X_new)[0]
-
-    return int(prediction)
-
+    
+    return {
+        "survived": int(prediction),
+        "probability_not_survived": probabilities[0][0],
+        "probability_survived": probabilities[0][1]
+    }   

@@ -15,3 +15,5 @@ class PassengerPredictionRequest(PassengerBase):
 
 class PassengerPredictionResponse(PassengerBase):
     survived: bool = Field(..., description="Survival status of the passenger")
+    probability_survived: float = Field(..., description="Probability of survival")
+    probability_not_survived: float = Field(..., description="Probability of not surviving")

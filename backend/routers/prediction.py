@@ -22,7 +22,7 @@ def predict_survival(passenger: PassengerPredictionRequest):
         "Embarked": passenger_dict.get("embarked")
     }
 
-    prediction = predict_passenger(aux_dict)
+    results = predict_passenger(aux_dict)
 
     passengerPredictionResponse = PassengerPredictionResponse(
         pClass=passenger_dict.get("pClass", 0),
@@ -32,7 +32,9 @@ def predict_survival(passenger: PassengerPredictionRequest):
         parch=passenger_dict.get("parch", 0),
         fare=passenger_dict.get("fare", 0.0),
         embarked=passenger_dict.get("embarked", ""),
-        survived=bool(prediction)
+        survived=bool(results.get("survived")),
+        probability_survived=results.get("probability_survived", 0.0),
+        probability_not_survived=results.get("probability_not_survived", 0.0)
     )
 
     return passengerPredictionResponse

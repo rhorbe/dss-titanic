@@ -55,7 +55,10 @@ def predict_passenger(passenger_dict):
     X_new = preprocess_new_passenger(passenger_dict)
 
     probabilities = model.predict_proba(X_new)
+    # print("prob:", model.predict_proba(X_new).reshape(-1))
+    # print("pred:", model.predict(X_new))
     prediction = model.predict(X_new)[0]
+    #print(probabilities, model.predict(X_new))
     
     return {
         "survived": int(prediction),

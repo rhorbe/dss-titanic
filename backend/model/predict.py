@@ -1,9 +1,12 @@
 # predict.py
 from sklearn.discriminant_analysis import StandardScaler
-from config.config import ROOT_DIR, X_TRAIN_PATH
+from config.config import ROOT_DIR, X_TRAIN_PATH, os
 import pandas as pd
 import joblib
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "svm", "svm_titanic.pkl")
+SCALER_PATH = os.path.join(BASE_DIR, "arbol", "scaler_titanic.pkl")
 
 def load_model(model_path="decision_tree_model.pkl"):
     return joblib.load(model_path)
@@ -25,7 +28,7 @@ def apply_preprocess(df):
     new_extended = pd.get_dummies(new_extended, columns=cat_cols)
 
     cols_to_scale = ["Age", "SibSp", "Parch", "Fare", "FamilySize"]
-    scaler = joblib.load(f'{ROOT_DIR}\\model\\scaler_titanic.pkl')
+    scaler = joblib.load(SCALER_PATH)
     new_extended[cols_to_scale] = scaler.transform(new_extended[cols_to_scale])
 
     feature_columns = pd.read_csv(X_TRAIN_PATH).columns
@@ -51,7 +54,9 @@ def predict_passenger(passenger_dict):
     Recibe un diccionario con los datos del pasajero
     y devuelve 0 (no sobrevivió) o 1 (sobrevivió).
     """
-    model = load_model(f'{ROOT_DIR}\\model\\svm\\svm_titanic.pkl')
+    #model = load_model(f'{ROOT_DIR}\\model\\svm\\svm_titanic.pkl')
+    model = load_model(MODEL_PATH)
+
     X_new = preprocess_new_passenger(passenger_dict)
 
     probabilities = model.predict_proba(X_new)

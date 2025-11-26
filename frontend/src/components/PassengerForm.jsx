@@ -151,8 +151,8 @@ export default function PassengerForm() {
               onChange={handleChange}
               isInvalid={validated && !formData.sex}
             >
-              <option value="male">male</option>
-              <option value="female">female</option>
+              <option value="male">Hombre</option>
+              <option value="female">Mujer</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">
               Debe seleccionar un sexo.
@@ -245,9 +245,9 @@ export default function PassengerForm() {
               onChange={handleChange}
               isInvalid={validated && !formData.embarked}
             >
-              <option value="S">S</option>
-              <option value="C">C</option>
-              <option value="Q">Q</option>
+              <option value="S">Southampton</option>
+              <option value="C">Cherbourg</option>
+              <option value="Q">Queenstown</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">
               Seleccione un puerto de embarque.

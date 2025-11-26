@@ -1,0 +1,21 @@
+/* Títulos centrados */
+.titulo-principal,
+.titulo-seccion {
+  text-align: center;
+}
+
+/* Subtítulo */
+.subtitulo-principal {
+  text-align: center;
+}
+
+/* Texto justificado */
+.texto-justificado {
+  text-align: justify;
+}
+
+/* Títulos internos de cada modelo */
+.titulo-modelo {
+  text-align: left;
+  font-weight: bold;
+}

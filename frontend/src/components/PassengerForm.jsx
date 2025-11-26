@@ -319,27 +319,7 @@ export default function PassengerForm() {
                 survived={result.survived}
               />
               )}
-              {/* 🔥 BARRA DE PROBABILIDAD
-              <div className="mt-3">
-                <div className="progress" style={{ height: "22px", borderRadius: "12px" }}>
-                  <div
-                    className={`progress-bar ${result.survived ? "bg-success" : "bg-danger"}`}
-                    role="progressbar"
-                    style={{
-                      width: `${(result.survived
-                        ? result.probability_survived
-                        : result.probability_not_survived) * 100}%`,
-                      fontWeight: "bold"
-                    }}
-                  >
-                    {(
-                      (result.survived
-                        ? result.probability_survived
-                        : result.probability_not_survived) * 100
-                    ).toFixed(1)}%
-                  </div>
-                </div>
-              </div> */}
+            
 
             </div>
           )}
